@@ -1,32 +1,57 @@
 package decorator
 
-// ICoffee is an interface that will be implemented by all the concrete coffee types
+// define the interface for the decorator ----->
 type ICoffee interface {
 	Cost() int
 	Description() string
 }
 
-// Coffee is a struct that will be used as a concrete coffee type
+// <----- define the interface for the decorator
+
+// define the concrit struct that will be decorated for the decorator ----->
 type Coffee struct {
 	CoffeeCost        int
 	CoffeeDescription string
 }
 
-// WithMilk is a struct that will be used as a concrete coffee type with milk. It will implement the ICoffee interface
-// WithMilk will have an additional cost and description
-// WithMilk will have a reference to the ICoffee interface
+func NewCoffee() ICoffee {
+	return &Coffee{
+		CoffeeCost:        5,
+		CoffeeDescription: "Coffee",
+	}
+}
+
+func (c *Coffee) Cost() int {
+	return c.CoffeeCost
+}
+
+func (c *Coffee) Description() string {
+	return c.CoffeeDescription
+}
+
+// <----- define the concrit struct that will be decorated for the decorator
+
+// define the decorator ----->
 type WithMilk struct {
 	coffee                ICoffee
 	AdditionalCost        int
 	AdditionalDescription string
 }
 
-// Cost is a method that will return the cost of the coffee with milk (additional cost + coffee cost)
+func NewWithMilk(coffee ICoffee) ICoffee {
+	return &WithMilk{
+		coffee:                coffee,
+		AdditionalCost:        2,
+		AdditionalDescription: "with milk",
+	}
+}
+
 func (c *WithMilk) Cost() int {
 	return c.coffee.Cost() + c.AdditionalCost
 }
 
-// Description is a method that will return the description of the coffee with milk (additional description + coffee description)
 func (c *WithMilk) Description() string {
 	return c.coffee.Description() + " " + c.AdditionalDescription
 }
+
+// <----- define the decorator
